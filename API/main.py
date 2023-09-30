@@ -14,6 +14,10 @@ class post(BaseModel):
 
 myPosts = [{"title": "Post 1 title" ,"content": "Post 1 content", "id":1},{"title": "Fav Food" ,"content": "I LOVE Pizza", "id":2}]
 
+def findPost(id):
+    for p in myPosts:
+        if p["id"]==id:
+            return p
 
 @app.get("/")
 async def root():
@@ -31,3 +35,9 @@ async def create_posts(post: post):
     postDict['id'] = randrange(0,100000)
     myPosts.append(postDict)
     return{"data": postDict}
+
+@app.get("/posts/{id}")
+def getPosts(id: int):
+    # print(id)
+    post = findPost(id)
+    return {"post_detail": post}
