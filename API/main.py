@@ -36,6 +36,12 @@ async def create_posts(post: post):
     myPosts.append(postDict)
     return{"data": postDict}
 
+
+@app.get("/posts/latest")
+def getlatest():
+    post = myPosts [len(myPosts)-1]
+    return {"detail": post}
+
 @app.get("/posts/{id}")
 def getPosts(id: int):
     # print(id)
