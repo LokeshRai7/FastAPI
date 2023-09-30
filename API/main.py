@@ -12,16 +12,19 @@ class post(BaseModel):
     rating: Optional[int] = None
 
 
+myPosts = [{"title": "Post 1 title" ,"content": "Post 1 content", "id":1},{"title": "Fav Food" ,"content": "I LOVE Pizza", "id":2}]
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World, Loki Boyy is here! Get Wreckedd :)"}
 
 @app.get("/posts")
 async def get_post():
-    return {"post":"Your post is here !"}
+    return {"data": myPosts}
 
-@app.post("/createPost")
-async def create_posts(new_post: post):
-    print(new_post.rating)
-    print(new_post.dict())
+@app.post("/posts")
+async def create_posts(post: post):
+    print(post.rating)
+    print(post.model_dump())
     return{"data":"new post lovely"}
