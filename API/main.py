@@ -18,6 +18,12 @@ def findPost(id):
     for p in myPosts:
         if p["id"]==id:
             return p
+        
+def findPostIndex(id):
+    for i, p in enumerate(myPosts):
+        if p['id']==id:
+            return i
+
 
 @app.get("/")
 async def root():
@@ -27,7 +33,7 @@ async def root():
 async def get_post():
     return {"data": myPosts}
 
-@app.post("/posts")
+@app.post("/posts",status_code=status.HTTP_201_CREATED)
 async def create_posts(post: post):
     # print(post.rating)
     # print(post.model_dump())
@@ -49,3 +55,13 @@ def getPosts(id: int):
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Post with ID {id} not found or does not exist :/")
     return {"post_detail": post}
+
+
+@app.delete('/posts/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def deletePost(id: int):
+    #deleting post
+    #find index in the array that has the required id
+    #myPosts.pop(index) PRETTY SIMPLE :)
+    index = findPostIndex(id)
+    myPosts.pop(index)
+    return {"Message":"Post has been deleted successfully"}
