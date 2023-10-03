@@ -75,7 +75,7 @@ def updatePost(id: int, post: post):
     if index == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id {id} does not exist")
     postDict = post.dict()
-    postDict['id'] == id
+    postDict['id'] = id
     myPosts[index] = postDict
 
 
