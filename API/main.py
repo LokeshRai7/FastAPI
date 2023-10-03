@@ -63,5 +63,8 @@ def deletePost(id: int):
     #find index in the array that has the required id
     #myPosts.pop(index) PRETTY SIMPLE :)
     index = findPostIndex(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
     myPosts.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
