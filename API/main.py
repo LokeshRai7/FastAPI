@@ -81,14 +81,16 @@ async def create_posts(post:Post,db: Session = Depends(get_db)):
 #     post = myPosts [len(myPosts)-1]
 #     return {"detail": post}
 
-# @app.get("/posts/{id}")
-# def getPosts(id: int):
-#     cursor.execute(""" SELECT * FROM posts WHERE id = %s """, str(id))
-#     requestedPost = cursor.fetchone()
-#     print(requestedPost)
-#     if not requestedPost:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Post with ID {id} not found or does not exist :/")
-#     return {"post_detail": requestedPost}
+@app.get("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
+def getPosts(id: int, db: Session = Depends(get_db)):
+    # cursor.execute(""" SELECT * FROM posts WHERE id = %s """, str(id))
+    # requestedPost = cursor.fetchone()
+    requestedPost = db.query(models.Post).filter(models.Post.id == id).first()
+
+    # print(requestedPost)
+    if not requestedPost:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Post with ID {id} not found or does not exist :/")
+    return {"post_detail": requestedPost}
 
 
 # @app.delete('/posts/{id}', status_code=status.HTTP_204_NO_CONTENT)
