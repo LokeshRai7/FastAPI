@@ -93,18 +93,20 @@ def getPosts(id: int, db: Session = Depends(get_db)):
     return {"post_detail": requestedPost}
 
 
-# @app.delete('/posts/{id}', status_code=status.HTTP_204_NO_CONTENT)
-# def deletePost(id: int):
+@app.delete('/posts/{id}', status_code=status.HTTP_204_NO_CONTENT)
+def deletePost(id: int, db: Session = Depends(get_db)):
 #     #deleting post     #find index in the array that has the required id #myPosts.pop(index) PRETTY SIMPLE :)
 #     cursor.execute(""" DELETE FROM posts WHERE id = %s RETURNING *""",str(id))
 #     deletedPost = cursor.fetchone()
 #     conn.commit()
 #     # index = findPostIndex(id)
-#     if deletedPost == None:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id {id} does not exist")
+    deletedPost = db.query(models.Post).filter(models.Post.id == id)
 
-#     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
+    if deletedPost.first() == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id {id} does not exist")
+    deletedPost.delete(synchronize_session = False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 # @app.put("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
 # def updatePost(id: int, post: post):
 #     # index = findPostIndex(id)
