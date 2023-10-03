@@ -31,11 +31,11 @@ app = FastAPI()
 #         time.sleep(2)
 
 
-# class post(BaseModel):
-#     title: str
-#     content: str
-#     published: bool = True
-#     # rating: Optional[int] = None
+class Post(BaseModel):
+    title: str
+    content: str
+    published: bool = True
+    # rating: Optional[int] = None
 
 
 # myPosts = [{"title": "Post 1 title" ,"content": "Post 1 content", "id":1},{"title": "Fav Food" ,"content": "I LOVE Pizza", "id":2}]
@@ -62,14 +62,18 @@ async def get_post(db: Session = Depends(get_db)):
     posts = db.query(models.Post).all()
     return {"data": posts}
 
-# @app.post("/posts",status_code=status.HTTP_201_CREATED)
-# async def create_posts(post: post):
-   
+@app.post("/posts",status_code=status.HTTP_201_CREATED)
+async def create_posts(post:Post,db: Session = Depends(get_db)):
+    # newPost = models.Post(title=post.title, content = post.content, published= post.published)
+    newPost = models.Post(**post.dict())
+    db.add(newPost)
+    db.commit()
+    db.refresh(newPost)
 #     cursor.execute(""" INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """,(post.title,post.content,post.published))
 
 #     newPost = cursor.fetchone()
 #     conn.commit()
-#     return{"data": newPost}
+    return newPost
 
 
 # @app.get("/posts/latest")
