@@ -68,3 +68,17 @@ def deletePost(id: int):
 
     myPosts.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@app.put("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
+def updatePost(id: int, post: post):
+    index = findPostIndex(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id {id} does not exist")
+    postDict = post.dict()
+    postDict['id'] == id
+    myPosts[index] = postDict
+
+
+    print(post)
+    # return {"message":f"Post {id} updated :)"}
+    return {"data":postDict}
