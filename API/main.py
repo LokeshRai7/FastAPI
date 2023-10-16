@@ -42,6 +42,8 @@ def getPosts(id: int, db: Session = Depends(get_db)):
     return {"post_detail": requestedPost}
 
 
+
+
 @app.delete('/posts/{id}', status_code=status.HTTP_204_NO_CONTENT)
 def deletePost(id: int, db: Session = Depends(get_db)):
 
@@ -53,8 +55,11 @@ def deletePost(id: int, db: Session = Depends(get_db)):
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
+
+
 @app.put("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
-def updatePost(id: int, updated_posts: Post, db: Session = Depends(get_db)):
+def updatePost(id: int, updated_posts: schemas.Post, db: Session = Depends(get_db)):
     # index = findPostIndex(id)
     # cursor.execute(""" UPDATE posts SET title = %s, content = %s, published = %s  WHERE id = %s RETURNING *;""",(post.title,post.content,post.published,str(id)))
     # updatedPost = cursor.fetchone()
