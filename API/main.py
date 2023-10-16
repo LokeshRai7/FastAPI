@@ -18,7 +18,7 @@ async def get_post(db: Session = Depends(get_db)):
     posts = db.query(models.Post).all()
     return {"data": posts}
 
-@app.post("/posts",status_code=status.HTTP_201_CREATED)
+@app.post("/posts",status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 async def create_posts(post:schemas.PostCreate,db: Session = Depends(get_db)):
     
     newPost = models.Post(**post.dict())
@@ -31,7 +31,7 @@ async def create_posts(post:schemas.PostCreate,db: Session = Depends(get_db)):
 
 
 
-@app.get("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
+@app.get("/posts/{id}", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.Post)
 def getPosts(id: int, db: Session = Depends(get_db)):
 
     requestedPost = db.query(models.Post).filter(models.Post.id == id).first()
@@ -39,7 +39,7 @@ def getPosts(id: int, db: Session = Depends(get_db)):
 
     if not requestedPost:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Post with ID {id} not found or does not exist :/")
-    return {"post_detail": requestedPost}
+    return requestedPost
 
 
 
@@ -73,4 +73,4 @@ def updatePost(id: int, updated_posts: schemas.Post, db: Session = Depends(get_d
     post_query.update(updated_posts.dict(), synchronize_session = False)
     db.commit()
 
-    return {"data":post_query.first()}
+    return post_query.first()
