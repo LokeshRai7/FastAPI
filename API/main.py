@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from sqlalchemy.orm import Session
 from . import models, schemas
@@ -12,11 +12,11 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World, Loki Boyy is here! Get Wreckedd :)"}
 
-@app.get("/posts")
+@app.get("/posts", response_model=List[schemas.Post])
 async def get_post(db: Session = Depends(get_db)):
   
     posts = db.query(models.Post).all()
-    return {"data": posts}
+    return posts
 
 @app.post("/posts",status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 async def create_posts(post:schemas.PostCreate,db: Session = Depends(get_db)):
@@ -59,7 +59,7 @@ def deletePost(id: int, db: Session = Depends(get_db)):
 
 
 @app.put("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
-def updatePost(id: int, updated_posts: schemas.Post, db: Session = Depends(get_db)):
+def updatePost(id: int, updated_posts: schemas.PostCreate, db: Session = Depends(get_db)):
     # index = findPostIndex(id)
     # cursor.execute(""" UPDATE posts SET title = %s, content = %s, published = %s  WHERE id = %s RETURNING *;""",(post.title,post.content,post.published,str(id)))
     # updatedPost = cursor.fetchone()
