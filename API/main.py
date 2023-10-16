@@ -66,7 +66,7 @@ def deletePost(id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @app.put("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
-def updatePost(id: int, posts: Post, db: Session = Depends(get_db)):
+def updatePost(id: int, updated_posts: Post, db: Session = Depends(get_db)):
     # index = findPostIndex(id)
     # cursor.execute(""" UPDATE posts SET title = %s, content = %s, published = %s  WHERE id = %s RETURNING *;""",(post.title,post.content,post.published,str(id)))
     # updatedPost = cursor.fetchone()
@@ -77,10 +77,10 @@ def updatePost(id: int, posts: Post, db: Session = Depends(get_db)):
     if post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"post with id {id} does not exist")
     
-    post_query.update({'title':'Heya title updated', 'content':'content has been updated! Et Voila'}, synchronize_session = False)
+    post_query.update(updated_posts.dict(), synchronize_session = False)
     db.commit()
 
-    return {"data updated successfully"}
+    return {"data":post_query.first()}
 
 
 # @app.get("/sqlalchemy")
