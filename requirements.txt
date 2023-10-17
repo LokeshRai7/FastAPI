@@ -32,3 +32,6 @@ ujson==5.8.0
 uvicorn==0.23.2
 watchfiles==0.20.0
 websockets==11.0.3
+
+bcrypt==4.0.1
+passlib==1.7.4

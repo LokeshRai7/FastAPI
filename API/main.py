@@ -1,10 +1,15 @@
 from typing import Optional, List
 from fastapi import FastAPI, Response, status, HTTPException, Depends
+
 from sqlalchemy.orm import Session
-from . import models, schemas
+from . import models, schemas, utils
 from .database import engine, get_db
 
+
+
+
 models.Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI()
 
@@ -78,6 +83,9 @@ def updatePost(id: int, updated_posts: schemas.PostCreate, db: Session = Depends
 
 @app.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.userOut)
 def create_user(users: schemas.userCreate, db: Session = Depends(get_db)):
+    # Hash the password - user.password
+    hashed_pwd = utils.hash(users.password)
+    users.password = hashed_pwd
     new_user = models.User(**users.dict())
     db.add(new_user) 
     db.commit()
