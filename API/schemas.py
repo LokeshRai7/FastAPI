@@ -32,3 +32,8 @@ class userOut(BaseModel):
     created_at: datetime
     class Config:
         orm = True
+
+
+class userLogin(BaseModel):
+    email : EmailStr
+    password : str
