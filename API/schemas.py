@@ -1,5 +1,5 @@
 # Input Validation via the pydantic models to maintain requests are validated accurately
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
 class PostBase(BaseModel):
@@ -21,3 +21,14 @@ class PostUpdate(PostBase):
     pass
 
 
+class userCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class userOut(BaseModel):
+    id : int
+    email: EmailStr
+    created_at: datetime
+    class Config:
+        orm = True
