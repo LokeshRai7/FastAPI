@@ -1,6 +1,7 @@
 # Input Validation via the pydantic models to maintain requests are validated accurately
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from typing import Optional
 
 class PostBase(BaseModel):
     title: str
@@ -37,3 +38,11 @@ class userOut(BaseModel):
 class userLogin(BaseModel):
     email : EmailStr
     password : str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    id: Optional[str] = None
