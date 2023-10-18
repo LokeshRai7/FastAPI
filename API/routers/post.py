@@ -16,6 +16,7 @@ async def get_post(db: Session = Depends(get_db), user_id: int = Depends(oauth2.
 @router.post("/",status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 async def create_posts(post:schemas.PostCreate,db: Session = Depends(get_db),current_user: int = Depends(oauth2.get_current_user)):
     
+    print(current_user.id)
     newPost = models.Post(**post.dict())
     db.add(newPost)
     db.commit()
