@@ -21,5 +21,5 @@ app.include_router(auth.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World, Loki Boyy is here! Get Wreckedd :)"}
+    return {"message": "Hello World, Loki Boyy is here! Get reked :)"}
 
